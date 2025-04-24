@@ -112,3 +112,5 @@ elif command -v netstat &>/dev/null; then
 else
   echo -e "${RED}Error:${NC} Neither ss nor netstat command found. Cannot display listening ports."
 fi
+
+echo -e "\n${GREEN}Server Statistics Report Complete${NC}"
