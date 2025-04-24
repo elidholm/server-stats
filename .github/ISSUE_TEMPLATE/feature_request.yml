@@ -6,13 +6,17 @@ labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
-      value: Thanks for taking the time to suggest a feature! Please fill out the following sections to help me understand the request.
+      value: >-
+        Thanks for taking the time to suggest a feature!
+        Please fill out the following sections to help me understand the request.
 
   - type: checkboxes
     id: terms
     attributes:
       label: Guidelines
-      description: By submitting this issue, you agree to follow the project's [Contributing Guidelines](https://github.com/elidholm/server-stats/blob/master/.github/CONTRIBUTING.md).
+      description: >-
+        By submitting this issue, you agree to follow the project's
+        [Contributing Guidelines](https://github.com/elidholm/server-stats/blob/master/.github/CONTRIBUTING.md).
       options:
         - label: I agree to follow the projects Contributing Guidelines.
           required: true
