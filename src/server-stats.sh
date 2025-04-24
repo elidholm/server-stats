@@ -36,6 +36,32 @@ fi
 print_stat "Kernel" "$(uname -s) $(uname -r)"
 
 print_header "CPU Usage"
-cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8"%"}')
-print_stat "Total CPU Usage" "$cpu_usage"
+idle_cpu=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}' | sed 's/,/./')
+cpu_usage=$(echo "100-$idle_cpu" | bc)
+print_stat "Total CPU Usage" "$cpu_usage%"
 
+print_header "Memory Usage"
+memory_info=$(free -m | grep "Mem:")
+total_memory=$(echo "$memory_info" | awk '{print $2}')
+used_memory=$(echo "$memory_info" | awk '{print $3}')
+free_memory=$(echo "$memory_info" | awk '{print $4}')
+available_memory=$(echo "$memory_info" | awk '{print $7}')
+memory_usage=$(echo " scale=2; $used_memory/$total_memory*100" | bc)
+
+print_stat "Total Memory" "$total_memory MB"
+print_stat "Used Memory" "$used_memory MB ($memory_usage%)"
+print_stat "Free Memory" "$(echo "${free_memory}+${available_memory}" | bc) MB ($(echo "scale=2; 100-$memory_usage" | bc)%)"
+
+swap_info=$(free -m | grep "Swap:")
+total_swap=$(echo "$swap_info" | awk '{print $2}')
+used_swap=$(echo "$swap_info" | awk '{print $3}')
+free_swap=$(echo "$swap_info" | awk '{print $4}')
+
+if [ "$total_swap" -ne 0 ]; then
+  swap_usage=$(echo "scale=2; $used_swap/$total_swap*100" | bc)
+  print_stat "Total Swap Memory" "$total_swap MB"
+  print_stat "Used Swap Memory" "$used_swap MB ($swap_usage%)"
+  print_stat "Free Swap Memory" "$free_swap MB ($(echo "scale=2; 100-$swap_usage" | bc)%)"
+else
+  print_stat "Swap" "No swap configured"
+fi
