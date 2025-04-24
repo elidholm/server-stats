@@ -1,0 +1,93 @@
+---
+name: Bug report
+description: Create a report to help me improve
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to report a bug! Please fill out the following sections to help me understand the issue.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Guidelines
+      description: By submitting this issue, you agree to follow the project's [Contributing Guidelines](https://github.com/elidholm/server-stats/blob/master/.github/CONTRIBUTING.md).
+      options:
+        - label: I agree to follow the projects Contributing Guidelines.
+          required: true
+
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: To reproduce
+      description: Steps to reproduce the behaviour.
+      placeholder: |
+        1. Run command '...'
+        2. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: Expected behaviour
+      description: A clear and concise description of what you expected to happen.
+      placeholder: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem.
+      placeholder: Upload screenshots, gifs and videos here
+    validations:
+      required: false
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: The operating system and version you are using.
+      placeholder: e.g. Ubuntu 22.04
+    validations:
+      required: true
+
+  - type: input
+    id: shell
+    attributes:
+      label: Shell
+      description: The shell and version you are using.
+      placeholder: e.g. bash 5.1.16
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Project Version
+      description: The version of the project you are using.
+      placeholder: e.g. 1.0.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Add any other context about the problem here.
+      placeholder: Is there anything else you want to add?
+    validations:
+      required: false
+
