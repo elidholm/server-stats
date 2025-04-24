@@ -94,3 +94,7 @@ print_header "Top 5 Processes by CPU Usage"
 ps aux --sort=-%cpu | head -n 6 | awk 'NR==1 {printf "\033[0;33m%-10s %-10s %-10s %-10s\033[0m\n", $1, $2, $3, $11}
 NR>1 {printf "%-10s %-10s %-10s %-10s\n", $1, $2, $3, $11}'
 
+print_header "Top 5 Processes by Memory Usage"
+ps aux --sort=-%mem | head -n 6 | awk 'NR==1 {printf "\033[0;33m%-10s %-10s %-10s %-10s\033[0m\n", $1, $2, $4, $11}
+NR>1 {printf "%-10s %-10s %-10s %-10s\n", $1, $2, $4, $11}'
+
