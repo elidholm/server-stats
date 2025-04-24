@@ -42,6 +42,10 @@ elif [ -f /etc/lsb-release ]; then
 fi
 print_stat "Kernel" "$(uname -s) $(uname -r)"
 
+print_header "Uptime"
+uptime_info=$(uptime -p)
+print_stat "Uptime" "$uptime_info"
+
 print_header "CPU Usage"
 idle_cpu=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}' | sed 's/,/./')
 cpu_usage=$(echo "100-$idle_cpu" | bc)
