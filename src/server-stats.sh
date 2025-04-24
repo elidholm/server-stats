@@ -98,3 +98,8 @@ print_header "Top 5 Processes by Memory Usage"
 ps aux --sort=-%mem | head -n 6 | awk 'NR==1 {printf "\033[0;33m%-10s %-10s %-10s %-10s\033[0m\n", $1, $2, $4, $11}
 NR>1 {printf "%-10s %-10s %-10s %-10s\n", $1, $2, $4, $11}'
 
+print_header "Network Information"
+print_stat "Hostname" "$(hostname)"
+print_stat "Local IP address" "$(ip addr | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d/ -f1 | tail -1)"
+print_stat "Public IP Address" "$(curl -s ifconfig.me)"
+
