@@ -4,6 +4,10 @@
 # Author: Edvin Lidholm
 # Date: 2025-04-24
 
+set -euo pipefail
+
+LC_NUMERIC="en_US.UTF-8"
+
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
@@ -16,6 +20,14 @@ print_header() {
 
 print_stat() {
   echo -e "${YELLOW}$1:${NC} $2"
+}
+
+calculate_percentage() {
+  local total=$1
+  local used=$2
+  local percentage
+  percentage=$(echo "$used/$total*100" | bc -l)
+  printf "%.2f%%" "$percentage"
 }
 
 # Chheck if running as root (some commands might need elevated privileges)
@@ -46,22 +58,35 @@ total_memory=$(echo "$memory_info" | awk '{print $2}')
 used_memory=$(echo "$memory_info" | awk '{print $3}')
 free_memory=$(echo "$memory_info" | awk '{print $4}')
 available_memory=$(echo "$memory_info" | awk '{print $7}')
-memory_usage=$(echo " scale=2; $used_memory/$total_memory*100" | bc)
+memory_usage=$(calculate_percentage "$total_memory" "$used_memory")
 
 print_stat "Total Memory" "$total_memory MB"
-print_stat "Used Memory" "$used_memory MB ($memory_usage%)"
-print_stat "Free Memory" "$(echo "${free_memory}+${available_memory}" | bc) MB ($(echo "scale=2; 100-$memory_usage" | bc)%)"
+print_stat "Used Memory" "$used_memory MB ($memory_usage)"
+print_stat "Free Memory" "$free_memory MB"
+print_stat "Available Memory" "$available_memory MB"
 
+echo
 swap_info=$(free -m | grep "Swap:")
 total_swap=$(echo "$swap_info" | awk '{print $2}')
 used_swap=$(echo "$swap_info" | awk '{print $3}')
 free_swap=$(echo "$swap_info" | awk '{print $4}')
 
 if [ "$total_swap" -ne 0 ]; then
-  swap_usage=$(echo "scale=2; $used_swap/$total_swap*100" | bc)
+  swap_usage=$(calculate_percentage "$total_swap" "$used_swap")
   print_stat "Total Swap Memory" "$total_swap MB"
-  print_stat "Used Swap Memory" "$used_swap MB ($swap_usage%)"
-  print_stat "Free Swap Memory" "$free_swap MB ($(echo "scale=2; 100-$swap_usage" | bc)%)"
+  print_stat "Used Swap Memory" "$used_swap MB ($swap_usage)"
+  print_stat "Free Swap Memory" "$free_swap MB"
 else
   print_stat "Swap" "No swap configured"
 fi
+
+print_header "Disk Usage"
+df_output=$(df -h --total | grep "total")
+total_disk=$(echo "$df_output" | awk '{print $2}' | sed 's/G//')
+used_disk=$(echo "$df_output" | awk '{print $3}' | sed 's/G//')
+free_disk=$(echo "$df_output" | awk '{print $4}' | sed 's/G//')
+disk_usage=$(calculate_percentage "$total_disk" "$used_disk")
+print_stat "Total Disk Space" "$total_disk GB"
+print_stat "Used Disk Space" "$used_disk GB ($disk_usage)"
+print_stat "Free Disk Space" "$free_disk GB"
+
