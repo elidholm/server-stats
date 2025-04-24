@@ -30,11 +30,6 @@ calculate_percentage() {
   printf "%.2f%%" "$percentage"
 }
 
-# Chheck if running as root (some commands might need elevated privileges)
-if [ "$EUID" -ne 0 ]; then
-  echo -e "${RED}Warning:${NC} Some statistics might be limited because script is not running as root"
-fi
-
 echo -e "${GREEN}Server Statistics Report - $(uname -n)${NC}"
 echo -e "${GREEN}Generated on: $(date)${NC}"
 
