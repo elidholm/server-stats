@@ -98,3 +98,13 @@ print_stat "Hostname" "$(hostname)"
 print_stat "Local IP address" "$(ip addr | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d/ -f1 | tail -1)"
 print_stat "Public IP Address" "$(curl -s ifconfig.me)"
 
+print_header "Listening Ports"
+if command -v ss &>/dev/null; then
+  ss -tuln | grep -E 'LISTEN|Netid' | awk 'NR==1 {printf "\033[0;33m%-10s %-10s\033[0m\n", "Proto", "Local Address:Port"}
+  NR>1 {printf "%-10s %-10s\n", $1, $5}'
+elif command -v netstat &>/dev/null; then
+  netstat -tuln | grep -E 'LISTEN|Proto' | awk 'NR==1 {printf "\033[0;33m%-10s %-10s\033[0m\n", "Proto", "Local Address:Port"}
+  NR>1 {printf "%-10s %-10s\n", $1, $4}'
+else
+  echo -e "${RED}Error:${NC} Neither ss nor netstat command found. Cannot display listening ports."
+fi
