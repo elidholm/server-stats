@@ -35,9 +35,12 @@ echo -e "${GREEN}Generated on: $(date)${NC}"
 
 print_header "OS Information"
 if [ -f /etc/os-release ]; then
+  # shellcheck source=/dev/null
   . /etc/os-release
   print_stat "OS" "$NAME $VERSION"
 elif [ -f /etc/lsb-release ]; then
+  # shellcheck source=/dev/null
+  . /etc/lsb-release
   print_stat "OS" "$DISTRIB_ID $DISTRIB_RELEASE"
 fi
 print_stat "Kernel" "$(uname -s) $(uname -r)"
